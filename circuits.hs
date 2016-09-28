@@ -22,7 +22,7 @@ module Circuits (
         parap,      -- Adds a list of Phasors in parallel
         resistor,   -- Returns a Phasor describing a resistor
         capacitor,  -- Returns a Phasor describing a capacitor
-        inductor    -- Returns a Phasor describing an inductor
+        inductor,    -- Returns a Phasor describing an inductor
         disp
 ) where
 
@@ -30,6 +30,11 @@ import Graphics.Gnuplot.Simple
 
 data CoordSyst = Rectangular|Polar deriving (Eq,Show)
 type Phasor a = (a,a, CoordSyst)
+
+--instance Show (a,a,CoordSyst) where
+--show (a,b,c)
+--    | c == Rectangular = (Prelude.show a) ++ " + j" ++ (Prelude.show b)
+--    | otherwise = (Prelude.show a) ++ "<" ++ (Prelude.show b)
 
 todeg :: (Floating a) => a -> a
 todeg x = x * 180 / pi
@@ -149,5 +154,5 @@ inductor l w = (0.0,l*w,Rectangular)
 
 disp :: (Floating a, Show a) => Phasor a -> String
 disp (a,b,c)
-    | c == Rectangular = (show a) ++ " + j" ++ (show b)
-    | otherwise = (show a) ++ "<" ++ (show (todeg b))
+    | c == Rectangular = (Prelude.show a) ++ " + j" ++ (Prelude.show b)
+    | otherwise = (Prelude.show a) ++ " < " ++ (Prelude.show (todeg b))
