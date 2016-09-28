@@ -127,19 +127,10 @@ divp u v
     | (coordp v == Polar) = divp (convertp u) v
     | otherwise = convertp $ divp (convertp u) (convertp v)
 
-parallelp :: (Floating a) => Phasor a -> Phasor a -> Phasor a
-parallelp (a,b,s) (c,d,t)
-    | (s == Rectangular && t == Rectangular) =
-        let a2 = a ** 2
-            b2 = b ** 2
-            c2 = c ** 2
-            d2 = d ** 2
-        in divp ((a2+b2)*(c2+d2),0.0,Rectangular) (a*c2 + b2*c + a*d2 + a2*c, -(b*c2 + a2*d + b*d2 + b2*d),Rectangular)
-    | (s == Rectangular) = parallelp (a,b,s) (convertp (c,d,t))
-    | (t == Rectangular) = parallelp (convertp (a,b,s)) (c,d,t)
-    | otherwise = convertp $ parallelp (convertp (a,b,s)) (convertp (c,d,t))
+parallelp :: (Floating a, Eq a) => Phasor a -> Phasor a -> Phasor a
+parallelp a b = if (magp b /= 0.0) then divp (mulp a b) (addp a b) else (0.0,0.0,Rectangular)
 
-parap :: (Floating a) => [Phasor a] -> Phasor a
+parap :: (Floating a, Eq a) => [Phasor a] -> Phasor a
 parap (x:[]) = x
 parap (x:xs) = x `parallelp` (parap xs)
 
