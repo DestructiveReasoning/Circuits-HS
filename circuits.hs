@@ -23,6 +23,7 @@ module Circuits (
         resistor,   -- Returns a Phasor describing a resistor
         capacitor,  -- Returns a Phasor describing a capacitor
         inductor    -- Returns a Phasor describing an inductor
+        disp
 ) where
 
 import Graphics.Gnuplot.Simple
@@ -145,3 +146,8 @@ capacitor c w = (0.0,-1/(w*c),Rectangular)
 
 inductor :: (Floating a) => a -> a -> Phasor a
 inductor l w = (0.0,l*w,Rectangular)
+
+disp :: (Floating a, Show a) => Phasor a -> String
+disp (a,b,c)
+    | c == Rectangular = (show a) ++ " + j" ++ (show b)
+    | otherwise = (show a) ++ "<" ++ (show (todeg b))
