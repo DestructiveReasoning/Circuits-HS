@@ -65,7 +65,9 @@ roots a b c =
                 ((-b/(2*a),(discriminant' ** 0.5)/(2*a)),(-b/(2*a),-(discriminant' ** 0.5)/(2*a)))
 
 conjp :: (Floating a) => Phasor a -> Phasor a
-conjp p = (realp p, -(complexp p),coordp p)
+conjp (a,b,c)
+    | c == Rectangular = (a,-b,c)
+    | otherwise = convertp $ conjp (convertp (a,b,c))
 
 realp :: (Floating a) => Phasor a -> a
 realp (a,b,s)
@@ -126,6 +128,11 @@ divp u v
     | (coordp u == Polar) = divp u (convertp v)
     | (coordp v == Polar) = divp (convertp u) v
     | otherwise = convertp $ divp (convertp u) (convertp v)
+
+mulkp :: (Floating a, Ord a) => a -> Phasor a -> Phasor a
+mulkp k (a,b,c)
+    | c == Polar = if (k < 0) then (k*a, b + pi, c) else (k*a,b,c)
+    | otherwise = convertp $ mulkp k (convertp (a,b,c))
 
 parallelp :: (Floating a, Eq a) => Phasor a -> Phasor a -> Phasor a
 parallelp a b = if (magp b /= 0.0) then divp (mulp a b) (addp a b) else (0.0,0.0,Rectangular)
