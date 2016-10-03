@@ -31,11 +31,6 @@ import Graphics.Gnuplot.Simple
 data CoordSyst = Rectangular|Polar deriving (Eq,Show)
 type Phasor a = (a,a, CoordSyst)
 
---instance Show (a,a,CoordSyst) where
---show (a,b,c)
---    | c == Rectangular = (Prelude.show a) ++ " + j" ++ (Prelude.show b)
---    | otherwise = (Prelude.show a) ++ "<" ++ (Prelude.show b)
-
 todeg :: (Floating a) => a -> a
 todeg x = x * 180 / pi
 
@@ -154,3 +149,5 @@ disp :: (Floating a, Show a) => Phasor a -> String
 disp (a,b,c)
     | c == Rectangular = (Prelude.show a) ++ " + j" ++ (Prelude.show b)
     | otherwise = (Prelude.show a) ++ " < " ++ (Prelude.show (todeg b))
+
+
